@@ -13,11 +13,12 @@ import hashlib
 from datetime import datetime, timedelta
 import time
 import logging
+import re
 class LeiphoneSpider(CrawlSpider):
     name = 'leiphonespider'
     start_urls = [
         # 'http://www.leiphone.com/',
-        'http://www.leiphone.com/news/201512/rmKU2Xf9m4cJZCOM.html'
+        'http://www.leiphone.com/news/201512/BfKL8DFWiRfg2eju.html'
     ]
 # http://www.leiphone.com/news/201512/GuTyT6y60UcHt1BX.html
 #     rules = [
@@ -34,10 +35,16 @@ class LeiphoneSpider(CrawlSpider):
         date_time = time.strptime(date_time, u"%Y-%m-%d %H:%M")
         item.add_value('date_time', date_time)
         content = sel.xpath("//div[@class='pageCont lph-article-comView ']")
-        elements = content.xpath("h2")
-        for element in elements:
-            print element.extract()
-        # print(len(content))
-        # print(elements[len(elements)-2].extract())
-        # print(response.url)
+        elements = content.xpath("h2|p").extract()
+        content = "".join(elements)
+        match = re.findall('src="(http://\S*)"', content)
+        images = []
+        for match in match:
+            images.append(match)
+            content = content.replace(match, hashlib.sha1(match).hexdigest() + ".jpg")
+        if images:
+            item.add_value('image_url', hashlib.sha1(images[0]).hexdigest() + ".jpg")
+        item.add_value('image_urls', images)
+        item.add_value('content', content)
+        item.add_value('original_link', response.url)
         yield item.load_item()

@@ -7,7 +7,6 @@
 #
 #     http://doc.scrapy.org/en/latest/topics/settings.html
 #
-
 import sys
 
 sys.path.append('/home/zmy/wangpanjun/pyorc')
@@ -20,8 +19,8 @@ DOWNLOAD_HANDLERS = {
     's3': None,
 }
 LOG_LEVEL = 'INFO'
+# LOG_STDOUT = True
 BOT_NAME = 'pyorcnews'
-LOG_STDOUT = True
 
 SPIDER_MODULES = ['pyorcnews.spiders']
 NEWSPIDER_MODULE = 'pyorcnews.spiders'
@@ -36,7 +35,7 @@ DOWNLOAD_DELAY = 0.25
 DOWNLOAD_TIMEOUT = 5
 
 COOKIES_ENABLED = True
-# LOG_FILE = '/var/log/pyorc/scrapy/ten_spiders'
+LOG_FILE = '/var/log/pyorc/scrapy/ten_spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'pyorcnews (+http://www.yourdomain.com)'
@@ -46,7 +45,7 @@ USER_AGENT = 'pyorcnews (+http://www.yourdomain.com)'
 #     'big': (500, 500),
 # }
 CONCURRENT_REQUESTS_PER_DOMAIN = 10
-IMAGES_STORE = '/home/zmy/pyorcnews'
+IMAGES_STORE = '/home/zmy/wangpanjun/pyorcnews'
 DOWNLOADER_MIDDLEWARES = {
     # 'pyorcnews.misc.middleware.CustomHttpProxyMiddleware': 400,
     'pyorcnews.misc.middleware.CustomUserAgentMiddleware': 401,

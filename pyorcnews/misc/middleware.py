@@ -17,6 +17,7 @@ class CustomHttpProxyMiddleware(object):
 
     def process_request(self, request, spider):
         p = random.choice(PROXIES)
+
         request.meta['proxy'] = "http://%s" % p['ip_port']
 
 
