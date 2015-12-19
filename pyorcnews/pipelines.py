@@ -10,14 +10,14 @@ import logging
 
 class PyorcNewsPipeline(object):
     def open_spider(self, spider):
-        logging.info(u"～～～爬取开始～～～")
+        logging.info(u"～～～Spider START～～～")
 
     def process_item(self, item, spider):
         for key, value in item.items():
             item[key] = value[0]
-        print item
-
         item.save()
 
     def close_spider(self, spider):
-        logging.info(u"～～～爬取结束～～～")
+        logging.info(u"～～～Spider END～～～")
+
+

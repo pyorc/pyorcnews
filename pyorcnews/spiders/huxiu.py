@@ -3,19 +3,16 @@
 
 
 import hashlib
-
 from scrapy.linkextractors import LinkExtractor
 from scrapy.loader import ItemLoader
 from scrapy.selector import Selector
 from scrapy.spiders import CrawlSpider, Rule
-
 from pyorcnews.items import NewsItem
-# noinspection PyUnresolvedReferences
-from datetime import datetime, timedelta
-import time
 import logging
 from pyorcnews.config.config import CATEGORY
-import re
+from pyorcnews.utils.helper import compare_time, translate_content
+
+
 class NewsSpider(CrawlSpider):
     name = 'huxiuspider'
 
@@ -23,18 +20,17 @@ class NewsSpider(CrawlSpider):
         'http://www.huxiu.com'
     ]
 
-
     rules = [
         Rule(LinkExtractor(allow='/article/(\d)*/1.htm'),
              callback='parse_item', follow=False),
     ]
 
     def parse_item(self, response):
-        logging.info(u"正在爬取网站--->" + response.url)
+        logging.info(u"start crawl  --->  " + response.url)
         item = ItemLoader(item=NewsItem(), response=response)
         images = []
         sel = Selector(response)
-
+        item.add_xpath('keywords', "//head/meta[@name='keywords']/@content")
         if sel.xpath('//div[@class="neirong-shouquan"]'):
             return
         item.add_xpath('title', '//div[@class="article-wrap"]/h1/text()')
@@ -43,20 +39,17 @@ class NewsSpider(CrawlSpider):
         item.add_value('original_link', response.url)
         item.add_value('category', CATEGORY.TECHNOLOGY)
         article_time = sel.xpath('//span[@class="article-time"]/text()').extract()
-        if not article_time:
+        date_time = compare_time(article_time, "%Y-%m-%d %H:%M")
+        if not date_time:
             return
-        article_time = time.strptime(article_time[0], u"%Y-%m-%d %H:%M")
         item.add_value('date_time', article_time)
         image_url = sel.xpath('//div[@class="article-img-box"]/img/@src').extract()[0]
         images.append(image_url)
         elements = sel.xpath('//div[@id="article_content"]/p').extract()
-        content = "".join(elements)
-        match = re.findall('src="(http://\S*)"', content)
-        for match in match:
-            images.append(match)
-            content = content.replace(match, hashlib.sha1(match).hexdigest() + ".jpg")
+        images, content = translate_content(elements)
         if images:
             item.add_value('image_url', hashlib.sha1(images[0]).hexdigest() + ".jpg")
         item.add_value('image_urls', images)
         item.add_value('content', content)
+        logging.info(u"finished crawl  --->  " + response.url)
         yield item.load_item()

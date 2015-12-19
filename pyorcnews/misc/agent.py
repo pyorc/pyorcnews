@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-__author__ = 'xiaowang'
-__date__ = '15-10-25'
 
 AGENTS = [
             "Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/532.4 (KHTML, like Gecko) Chrome/4.0.237.0 Safari/532.4 Debian",
