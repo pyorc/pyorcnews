@@ -1,9 +1,16 @@
 
-# pyorcnews------>基于scrapy框架的爬虫
+# pyorcnews------>基于scrapy的爬虫
 
 
 ##项目说明
-此项目是功能时爬取新闻网站的新闻信息存入数据库mysql中,项目中使用了[DjangoItem](https://github.com/scrapy/scrapy/blob/0.24/docs/topics/djangoitem.rst),所以需要依赖django项目[Pyorc](https://github.com/pyorc/pyorc)
+
+ 1. python:2.7
+ 2. scrapy:1.0.3
+ 3. django:1.8
+
+爬取新闻网站的新闻信息存入数据库mysql中,项目中使用了[DjangoItem](https://github.com/scrapy/scrapy/blob/0.24/docs/topics/djangoitem.rst),所以需要依赖django项目[Pyorc](https://github.com/pyorc/pyorc)
+
+----
 
 ##部署
 
@@ -64,3 +71,4 @@ crontab -e
 sudo service cron start
 
 至此部署完成，爬虫可以每六小时执行一此
+
