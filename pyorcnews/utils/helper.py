@@ -26,7 +26,7 @@ def compare_time(datetime_str, date_format="%Y-%m-%d %H:%M:%S", hours=HOURS):
 
 def translate_content(elements):
     content = "".join(elements)
-    match = re.findall('src="(http://\S*(.jpg|.png|.gif){1}")', content)
+    match = re.findall('src="(http://\S*(.jpg|.png|.gif){1})', content)
     images = []
     for match in match:
         images.append(match[0])
